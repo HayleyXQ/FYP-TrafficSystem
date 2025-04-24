@@ -199,7 +199,7 @@ def deepseek_generate_explanation(prompt):
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
     if response.ok:
         json_response = response.json()
-        #st.write("DeepSeek API JSON Response:", json_response)
+        st.write("DeepSeek API JSON Response:", json_response)
         if "error" in json_response:
             # Fallback static explanation if authentication fails
             return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
@@ -233,7 +233,7 @@ def r1_generate_explanation(prompt):
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
     if response.ok:
         json_response = response.json()
-        #st.write("R1 API JSON Response:", json_response)  # Debug: to verify structure
+        st.write("R1 API JSON Response:", json_response)  # Debug: to verify structure
         if "error" in json_response:
             return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
         if "choices" in json_response and isinstance(json_response["choices"], list):
