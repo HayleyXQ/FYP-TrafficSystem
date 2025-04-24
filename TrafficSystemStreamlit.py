@@ -191,8 +191,8 @@ def deepseek_generate_explanation(prompt):
         "Content-Type": "application/json"
     }
     payload = {
-        #"model": "deepseek/deepseek-chat:free",
-        "model": "deepseek/deepseek-chat",
+        "model": "deepseek/deepseek-chat:free",
+        #"model": "deepseek/deepseek-chat",
         "prompt": prompt,
         "max_tokens": 250,
         "temperature": 0.5
@@ -200,7 +200,8 @@ def deepseek_generate_explanation(prompt):
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
     if response.ok:
         json_response = response.json()
-        st.write("DeepSeek API JSON Response:", json_response)
+        #st.write("DeepSeek API JSON Response:", json_response)
+        st.json(json_response)
         if "error" in json_response:
             # Fallback static explanation if authentication fails
             st.write("Status Code:", response.status_code)
@@ -208,7 +209,9 @@ def deepseek_generate_explanation(prompt):
             return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
-                return json_response["choices"][0]["text"]
+                #return json_response["choices"][0]["text"]
+                return json_response["choices"][0]["message"]["content"]
+
             except KeyError:
                 return "No text returned (unexpected response structure)."
         else:
@@ -228,8 +231,8 @@ def r1_generate_explanation(prompt):
         "Content-Type": "application/json"
     }
     payload = {
-        #"model": "deepseek/deepseek-r1-zero:free",
-        "model": "deepseek/deepseek-r1-zero",
+        "model": "deepseek/deepseek-r1-zero:free",
+        #"model": "deepseek/deepseek-r1-zero",
         "prompt": prompt,
         "max_tokens": 250,
         "temperature": 0.5
@@ -242,7 +245,9 @@ def r1_generate_explanation(prompt):
             return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
-                return json_response["choices"][0]["text"]
+                #return json_response["choices"][0]["text"]
+                return json_response["choices"][0]["message"]["content"]
+
             except KeyError:
                 return "No text returned (unexpected response structure)."
         else:
