@@ -67,12 +67,12 @@ st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", i
 # Define Relative Paths for Deployment
 MODEL_PATHS = {
     #"CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
-    "CatBoost": "main/catmodel_traffic_model.pkl"
+    "CatBoost": "catmodel_traffic_model.pkl"
 }
 #DATA_PATH = "https://drive.google.com/uc?export=download&id=1cJcWoYNuhKNWluzd4mBsScuw0lHIhs5g"
 #DATA_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/cleaned_urban_traffic_density.csv"
 #PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
-PREPROCESSOR_PATH = "main/traffic_preprocessor.pkl"
+PREPROCESSOR_PATH = "traffic_preprocessor.pkl"
 
 
 # -----------------------------
