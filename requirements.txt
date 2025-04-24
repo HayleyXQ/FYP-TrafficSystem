@@ -12,3 +12,4 @@ folium
 streamlit-folium
 openai
 catboost
+statmodels
