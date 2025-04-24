@@ -186,37 +186,73 @@ def safe_pdf_text(txt: str) -> str:
 # DEEPSEEK API FUNCTION
 # -----------------------------
 def deepseek_generate_explanation(prompt):
-    """Call the DeepSeek-V3 API with the prompt (chat style) and return the explanation text."""
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
     payload = {
         "model": "deepseek/deepseek-chat:free",
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
+        "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 250,
         "temperature": 0.5
     }
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
+
     if response.ok:
         json_response = response.json()
-        #st.write("DeepSeek API JSON Response:", json_response)
-        st.json(json_response)
+        # If the API itself returned an error structure, log it:
         if "error" in json_response:
-            # Fallback static explanation if authentication fails
-            return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
-        if "choices" in json_response and isinstance(json_response["choices"], list):
-            try:
-                #return json_response["choices"][0]["text"]
-                return json_response["choices"][0]["message"]["content"].strip()
-            except KeyError:
-                return "No text returned (unexpected response structure)."
+            st.write("Model error:", json_response["error"])
+        elif (
+            "choices" in json_response
+            and isinstance(json_response["choices"], list)
+            and json_response["choices"]
+            and "message" in json_response["choices"][0]
+            and "content" in json_response["choices"][0]["message"]
+        ):
+            # **This** is the real completion
+            return json_response["choices"][0]["message"]["content"].strip()
         else:
-            return json_response.get("text", "No text returned.")
+            st.write("Unexpected response format:", json_response)
     else:
-        return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
+        # HTTP-level error: e.g. 401, 500, etc.
+        st.write("HTTP error:", response.status_code, response.text)
+
+    # Only get here if something went wrong
+    return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
+
+# def deepseek_generate_explanation(prompt):
+#     """Call the DeepSeek-V3 API with the prompt (chat style) and return the explanation text."""
+#     headers = {
+#         "Authorization": f"Bearer {api_key}",
+#         "Content-Type": "application/json"
+#     }
+#     payload = {
+#         "model": "deepseek/deepseek-chat:free",
+#         "messages": [
+#             {"role": "user", "content": prompt}
+#         ],
+#         "max_tokens": 250,
+#         "temperature": 0.5
+#     }
+#     response = requests.post(BASE_API_URL, json=payload, headers=headers)
+#     if response.ok:
+#         json_response = response.json()
+#         #st.write("DeepSeek API JSON Response:", json_response)
+#         st.json(json_response)
+#         if "error" in json_response:
+#             # Fallback static explanation if authentication fails
+#             return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
+#         if "choices" in json_response and isinstance(json_response["choices"], list):
+#             try:
+#                 #return json_response["choices"][0]["text"]
+#                 return json_response["choices"][0]["message"]["content"].strip()
+#             except KeyError:
+#                 return "No text returned (unexpected response structure)."
+#         else:
+#             return json_response.get("text", "No text returned.")
+#     else:
+#         return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
 
     
 
@@ -224,35 +260,66 @@ def deepseek_generate_explanation(prompt):
 # R1 API FUNCTION
 # -----------------------------
 def r1_generate_explanation(prompt):
-    """Call the DeepSeek-R1 API with the prompt (reasoning model) and return the explanation text."""
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
     payload = {
         "model": "deepseek/deepseek-r1-zero:free",
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
+        "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 250,
         "temperature": 0.5
     }
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
+
     if response.ok:
         json_response = response.json()
-        st.write("R1 API JSON Response:", json_response)  # Debug: to verify structure
         if "error" in json_response:
-            return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
-        if "choices" in json_response and isinstance(json_response["choices"], list):
-            try:
-                #return json_response["choices"][0]["text"]
-                return json_response["choices"][0]["message"]["content"].strip()
-            except KeyError:
-                return "No text returned (unexpected response structure)."
+            st.write("Model error:", json_response["error"])
+        elif (
+            "choices" in json_response
+            and json_response["choices"]
+            and "message" in json_response["choices"][0]
+            and "content" in json_response["choices"][0]["message"]
+        ):
+            return json_response["choices"][0]["message"]["content"].strip()
         else:
-            return json_response.get("text", "No text returned.")
+            st.write("Unexpected response format:", json_response)
     else:
-        return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
+        st.write("HTTP error:", response.status_code, response.text)
+
+    return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
+
+# def r1_generate_explanation(prompt):
+#     """Call the DeepSeek-R1 API with the prompt (reasoning model) and return the explanation text."""
+#     headers = {
+#         "Authorization": f"Bearer {api_key}",
+#         "Content-Type": "application/json"
+#     }
+#     payload = {
+#         "model": "deepseek/deepseek-r1-zero:free",
+#         "messages": [
+#             {"role": "user", "content": prompt}
+#         ],
+#         "max_tokens": 250,
+#         "temperature": 0.5
+#     }
+#     response = requests.post(BASE_API_URL, json=payload, headers=headers)
+#     if response.ok:
+#         json_response = response.json()
+#         st.write("R1 API JSON Response:", json_response)  # Debug: to verify structure
+#         if "error" in json_response:
+#             return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
+#         if "choices" in json_response and isinstance(json_response["choices"], list):
+#             try:
+#                 #return json_response["choices"][0]["text"]
+#                 return json_response["choices"][0]["message"]["content"].strip()
+#             except KeyError:
+#                 return "No text returned (unexpected response structure)."
+#         else:
+#             return json_response.get("text", "No text returned.")
+#     else:
+#         return "Static fallback explanation: The data indicates distinct peak periods for traffic congestion."
 
     
 
