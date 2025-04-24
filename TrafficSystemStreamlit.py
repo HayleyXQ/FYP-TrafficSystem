@@ -191,7 +191,8 @@ def deepseek_generate_explanation(prompt):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "deepseek/deepseek-chat:free",
+        #"model": "deepseek/deepseek-chat:free",
+        "model": "deepseek/deepseek-chat",
         "prompt": prompt,
         "max_tokens": 250,
         "temperature": 0.5
@@ -202,6 +203,8 @@ def deepseek_generate_explanation(prompt):
         st.write("DeepSeek API JSON Response:", json_response)
         if "error" in json_response:
             # Fallback static explanation if authentication fails
+            st.write("Status Code:", response.status_code)
+            st.write("Response:", response.text)
             return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
@@ -225,7 +228,8 @@ def r1_generate_explanation(prompt):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "deepseek/deepseek-r1-zero:free",
+        #"model": "deepseek/deepseek-r1-zero:free",
+        "model": "deepseek/deepseek-r1-zero",
         "prompt": prompt,
         "max_tokens": 250,
         "temperature": 0.5
