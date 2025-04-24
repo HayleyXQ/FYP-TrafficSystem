@@ -58,13 +58,11 @@ import gdown
 #api_key = os.getenv("DEEPSEEK_API_KEY")
 api_key = st.secrets["DEEPSEEK_API_KEY"]
 BASE_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-st.sidebar.write("🔑 Deepseek key loaded? ", bool(api_key))
-
-
 
 # Streamlit Page Config
 st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", initial_sidebar_state="expanded")
 
+st.sidebar.write("🔑 Deepseek key loaded? ", bool(api_key))
 
 
 # Define Relative Paths for Deployment
