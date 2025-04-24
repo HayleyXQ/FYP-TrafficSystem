@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+plotly
+matplotlib
+scikit-learn
+joblib
+fpdf
+gdown
+requests
+folium
+streamlit-folium
+openai
