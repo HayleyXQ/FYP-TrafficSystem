@@ -5,8 +5,7 @@
 # ├── Visualizations.py  <- User-chosen visualizations
 # ├── Reports.py         <- Export CSV/PDF with selected filters
 # ├── utils.py           <- Shared functions like model loading, mappings, etc.
-# ├── main/
-# │   └── catmodel_traffic_model.pkl
+# ├── catmodel_traffic_model.pkl
 # ├── data/
 # └──   └── cleaned_urban_traffic_density.csv
 # └── img/   
