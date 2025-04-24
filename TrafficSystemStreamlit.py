@@ -55,8 +55,8 @@ import gdown
 
 # API key for Deepseek/R1 endpoints
 #api_key = "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"
-#api_key = os.getenv("DEEPSEEK_API_KEY")
-api_key = st.secrets["DEEPSEEK_API_KEY"]
+#api_key = os.getenv("OPENROUTER_API_KEY")
+api_key = st.secrets["OPENROUTER_API_KEY"]
 BASE_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Streamlit Page Config
