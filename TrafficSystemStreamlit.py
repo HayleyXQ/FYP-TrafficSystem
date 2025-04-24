@@ -41,11 +41,13 @@ import gdown
 # -----------------------------
 # SETUP & CONFIGURATION
 # -----------------------------
+
 # Set OpenAI API key
-openai.api_key = "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"
+#openai.api_key = "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"
 
 # API key for Deepseek/R1 endpoints
-api_key = "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"
+#api_key = "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"
+api_key = os.getenv("DEEPSEEK_API_KEY")
 BASE_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
@@ -56,11 +58,13 @@ st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", i
 
 # Define Relative Paths for Deployment
 MODEL_PATHS = {
-    "CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
+    #"CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
+    "CatBoost": "main/catmodel_traffic_model.pkl"
 }
 #DATA_PATH = "https://drive.google.com/uc?export=download&id=1cJcWoYNuhKNWluzd4mBsScuw0lHIhs5g"
 #DATA_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/cleaned_urban_traffic_density.csv"
-PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
+#PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
+PREPROCESSOR_PATH = "main/traffic_preprocessor.pkl"
 
 
 # -----------------------------
@@ -489,7 +493,7 @@ if page == "🏠 Home":
 
     left, center, right = st.columns([1, 2, 1])  # 1:2:1 ratio for centering
     with center:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/city1_xuCMblCiC.gif", use_container_width=True)
+        st.image("FYP-TrafficSystem/blob/main/img/city1_xuCMblCiC.gif", use_container_width=True)
 
 
     
@@ -1073,7 +1077,7 @@ elif page == "💬 Feedback":
 
     left, center, right = st.columns([1, 2, 1])
     with center:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/9583344.gif", use_container_width=True)
+        st.image("FYP-TrafficSystem/blob/main/img/9583344.gif", use_container_width=True)
 
 
 # -----------------------------
@@ -1084,9 +1088,9 @@ elif page == "ℹ️ About":
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/1709808629051.png", width=750)
+        st.image("FYP-TrafficSystem/blob/main/img/1709808629051.png", width=750)
     with col2:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/1700487546341.png", width=500)
+        st.image("FYP-TrafficSystem/blob/main/img/1700487546341.png", width=500)
 
 
     st.markdown("""
