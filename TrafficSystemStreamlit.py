@@ -200,14 +200,12 @@ def deepseek_generate_explanation(prompt):
         "temperature": 0.5
     }
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
-    if not response.ok:
+    if response.ok:
         json_response = response.json()
         #st.write("DeepSeek API JSON Response:", json_response)
         st.json(json_response)
         if "error" in json_response:
             # Fallback static explanation if authentication fails
-            st.write("Status Code:", response.status_code)
-            st.write("Response:", response.text)
             return "Static fallback explanation: This plot depicts hourly traffic impact with noticeable fluctuations."
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
@@ -248,8 +246,7 @@ def r1_generate_explanation(prompt):
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
                 #return json_response["choices"][0]["text"]
-                return json_response["choices"][0]["message"]["content"]
-
+                return json_response["choices"][0]["message"]["content"].strip()
             except KeyError:
                 return "No text returned (unexpected response structure)."
         else:
