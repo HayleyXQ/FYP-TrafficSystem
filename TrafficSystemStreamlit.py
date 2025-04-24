@@ -192,8 +192,9 @@ def deepseek_generate_explanation(prompt):
     }
     payload = {
         "model": "deepseek/deepseek-chat:free",
-        #"model": "deepseek/deepseek-chat",
-        "prompt": prompt,
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
         "max_tokens": 250,
         "temperature": 0.5
     }
@@ -210,8 +211,7 @@ def deepseek_generate_explanation(prompt):
         if "choices" in json_response and isinstance(json_response["choices"], list):
             try:
                 #return json_response["choices"][0]["text"]
-                return json_response["choices"][0]["message"]["content"]
-
+                return json_response["choices"][0]["message"]["content"].strip()
             except KeyError:
                 return "No text returned (unexpected response structure)."
         else:
@@ -232,8 +232,9 @@ def r1_generate_explanation(prompt):
     }
     payload = {
         "model": "deepseek/deepseek-r1-zero:free",
-        #"model": "deepseek/deepseek-r1-zero",
-        "prompt": prompt,
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
         "max_tokens": 250,
         "temperature": 0.5
     }
