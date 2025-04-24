@@ -9,6 +9,15 @@
 # │   └── catmodel_traffic_model.pkl
 # ├── data/
 # └──   └── cleaned_urban_traffic_density.csv
+# └── img/   
+# └──   └── city1_xuCMblCiC.gif
+#       ├── 1709808629051.png
+#       ├── 9583344.gif
+#       ├── 9909421_1577692269_banner of smart city.jpg
+#       ├── city1_xuCMblCiC.gif
+#       └── ©-shutterstockmetamorworks_2082107314.jpg
+# └── traffic_preprocessor.pkl
+# └── requirements.txt
 
 
 
