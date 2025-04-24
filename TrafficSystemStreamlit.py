@@ -56,6 +56,7 @@ import gdown
 # API key for Deepseek/R1 endpoints
 #api_key = "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"
 api_key = os.getenv("DEEPSEEK_API_KEY")
+api_key = st.secrets["DEEPSEEK_API_KEY"]
 BASE_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
@@ -199,7 +200,7 @@ def deepseek_generate_explanation(prompt):
         "temperature": 0.5
     }
     response = requests.post(BASE_API_URL, json=payload, headers=headers)
-    if response.ok:
+    if not response.ok:
         json_response = response.json()
         #st.write("DeepSeek API JSON Response:", json_response)
         st.json(json_response)
