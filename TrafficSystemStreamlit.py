@@ -493,7 +493,7 @@ if page == "🏠 Home":
 
     left, center, right = st.columns([1, 2, 1])  # 1:2:1 ratio for centering
     with center:
-        st.image("FYP-TrafficSystem/blob/main/img/city1_xuCMblCiC.gif", use_container_width=True)
+        st.image("img/city1_xuCMblCiC.gif", use_container_width=True)
 
 
     
@@ -1077,7 +1077,7 @@ elif page == "💬 Feedback":
 
     left, center, right = st.columns([1, 2, 1])
     with center:
-        st.image("FYP-TrafficSystem/blob/main/img/9583344.gif", use_container_width=True)
+        st.image("img/9583344.gif", use_container_width=True)
 
 
 # -----------------------------
@@ -1088,9 +1088,9 @@ elif page == "ℹ️ About":
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image("FYP-TrafficSystem/blob/main/img/1709808629051.png", width=750)
+        st.image("img/1709808629051.png", width=750)
     with col2:
-        st.image("FYP-TrafficSystem/blob/main/img/1700487546341.png", width=500)
+        st.image("img/1700487546341.png", width=500)
 
 
     st.markdown("""
