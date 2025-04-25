@@ -188,9 +188,15 @@ def gemini_generate_explanation(
     # Directly use client.models.generate_content (no need to get_model)
     response = genai.generate_content(
         model=model_name,
-        contents=prompt
+        contents=[{"role": "user", "parts": [{"text": prompt}]}]
     )
-    return response.text if hasattr(response, "text") else ""
+
+    if hasattr(response, "candidates") and response.candidates:
+        return response.candidates[0].content.parts[0].text
+    else:
+        return ""
+
+
         
 def generate_explanation(plot_choice: str, filters: dict) -> str:
     """
