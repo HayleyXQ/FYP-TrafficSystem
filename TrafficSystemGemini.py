@@ -158,9 +158,7 @@ def safe_pdf_text(txt: str) -> str:
     return txt.encode('latin-1', 'ignore').decode('latin-1')
 
 
-# Initialize Gemini client
-client = genai.Client(api_key=GEMINI_API_KEY)
-
+genai.configure(api_key=GEMINI_API_KEY)
 
 def gemini_generate_explanation(
     prompt: str,
@@ -170,10 +168,11 @@ def gemini_generate_explanation(
     Call Google Gemini to generate a short explanation for a prompt.
     """
     # Directly use client.models.generate_content (no need to get_model)
-    response = client.models.generate_content(
+    response = genai.generate_content(
         model=model_name,
-        contents=[{"role": "user", "parts": [{"text": prompt}]}]
+        contents=prompt
     )
+    return response.text if hasattr(response, "text") else ""
         
 
     # Access the text output safely
