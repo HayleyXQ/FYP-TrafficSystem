@@ -42,7 +42,7 @@ import random
 import folium
 from streamlit_folium import folium_static
 import gdown
-from google import genai
+import google.generativeai as genai
 from utils import generate_explanation
 
 
