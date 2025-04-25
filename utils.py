@@ -4,8 +4,7 @@ import joblib
 import pandas as pd
 import streamlit as st
 import re
-from google import genai
-import streamlit as st
+import google.generativeai as genai
 
 
 @st.cache_resource
