@@ -63,26 +63,29 @@ def mappings(data):
 
 
 
-GEMINI_API_KEY = "AIzaSyAF_dpw5T3INCM-y9NNZW8z9uaEbdizwps"
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+# Initialize Gemini client
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
 def gemini_generate_explanation(
     prompt: str,
-    model_name: str = "gemini-2.0-flash",
-    max_tokens: int = 250,
-    temperature: float = 0.5
+    model_name: str = "gemini-2.0-flash"
 ) -> str:
     """
     Call Google Gemini to generate a short explanation for a prompt.
     """
-    resp = client.models.generate_content(
+    # Directly use client.models.generate_content (no need to get_model)
+    response = client.models.generate_content(
         model=model_name,
-        contents=prompt,
-        temperature=temperature,
-        max_output_tokens=max_tokens,
+        contents=[{"role": "user", "parts": [{"text": prompt}]}]
     )
-    return resp.text or "No explanation returned."
+        
+
+    # Access the text output safely
+    return response.text if hasattr(response, "text") else ""
+
+
 
 def generate_explanation(plot_choice: str, filters: dict) -> str:
     """
