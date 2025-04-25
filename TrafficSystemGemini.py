@@ -186,12 +186,13 @@ def gemini_generate_explanation(
     Call Google Gemini to generate a short explanation for a prompt.
     """
     try:
-        response = genai.generate_content(
-            model=model_name,
-            contents=[{"role": "user", "parts": [{"text": prompt}]}]
-        )
+        model = genai.GenerativeModel(model_name)  # Initialize the model
+        response = model.generate_content(prompt)  # Use the model instance
+
         # Safely extract the text
-        if hasattr(response, "candidates") and response.candidates:
+        if hasattr(response, "text"):
+            return response.text
+        elif hasattr(response, "candidates") and response.candidates:
             return response.candidates[0].content.parts[0].text
         else:
             return "No explanation generated."
