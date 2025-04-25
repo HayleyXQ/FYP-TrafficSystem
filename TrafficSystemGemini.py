@@ -62,11 +62,14 @@ st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", i
 
 # Define Relative Paths for Deployment
 MODEL_PATHS = {
-    "CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
+    #"CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
+    "CatBoost": "catmodel_traffic_model.pkl"
 }
 #DATA_PATH = "https://drive.google.com/uc?export=download&id=1cJcWoYNuhKNWluzd4mBsScuw0lHIhs5g"
-DATA_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/cleaned_urban_traffic_density.csv"
-PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
+#DATA_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/cleaned_urban_traffic_density.csv"
+#PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
+PREPROCESSOR_PATH = "traffic_preprocessor.pkl"
+
 
 
 # -----------------------------
@@ -95,13 +98,28 @@ with st.sidebar.expander("About this App"):
 # -----------------------------
 # UTILITY FUNCTIONS
 # -----------------------------
+@st.cache_data
+def load_data(url):
+    output = "cleaned_urban_traffic_density.csv"
+    gdown.download(url, output, quiet=False)
+    return pd.read_csv(output)
+
+DATA_PATH = "https://drive.google.com/uc?id=1cJcWoYNuhKNWluzd4mBsScuw0lHIhs5g"
+
+
+@st.cache_data
+def load_data(url, output="cleaned_urban_traffic_density.csv"):
+    if not os.path.exists(output):
+        gdown.download(url, output, quiet=False)
+    return pd.read_csv(output)
+
+
+
 @st.cache_resource
 def load_model(path):
     return joblib.load(path)
 
-@st.cache_data
-def load_data(path):
-    return pd.read_csv(path)
+
 
 @st.cache_resource
 def load_all_models(model_paths):
@@ -174,12 +192,6 @@ def gemini_generate_explanation(
     )
     return response.text if hasattr(response, "text") else ""
         
-
-    # Access the text output safely
-    return response.text if hasattr(response, "text") else ""
-
-
-
 def generate_explanation(plot_choice: str, filters: dict) -> str:
     """
     Build a concise prompt for the chosen traffic plot and return
@@ -277,7 +289,7 @@ if page == "🏠 Home":
 
     left, center, right = st.columns([1, 2, 1])  # 1:2:1 ratio for centering
     with center:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/city1_xuCMblCiC.gif", use_container_width=True)
+        st.image("img/city1_xuCMblCiC.gif", use_container_width=True)
 
 
     
@@ -812,7 +824,7 @@ elif page == "📥 Reports":
             
             # Include the explanation for the selected visualization.
             pdf.set_font("Times", "", 12)
-            vis_explanation_html = generate_hybrid_explanation(vis, {"city": city, "vehicle": vehicle, "weather": weather, "econ": econ})
+            vis_explanation_html = generate_explanation(vis, {"city": city, "vehicle": vehicle, "weather": weather, "econ": econ})
             vis_explanation_plain = strip_html(vis_explanation_html)
             pdf.multi_cell(0, 10, vis_explanation_plain)
             pdf.ln(5)
@@ -866,7 +878,8 @@ elif page == "💬 Feedback":
 
     left, center, right = st.columns([1, 2, 1])
     with center:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/9583344.gif", use_container_width=True)
+        st.image("img/9583344.gif", use_container_width=True)
+
 
 
 # -----------------------------
@@ -877,10 +890,10 @@ elif page == "ℹ️ About":
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/1709808629051.png", width=750)
+        st.image("img/1709808629051.png", width=750)
     with col2:
-        st.image("C:/Users/Ning Sheng Yong/Desktop/QING APU/SystemImages/1700487546341.png", width=500)
-
+        st.image("img/1700487546341.png", width=500)
+        
 
     st.markdown("""
     ### Overview  
