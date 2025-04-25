@@ -52,6 +52,8 @@ from utils import generate_explanation
 # -----------------------------
 
 #GEMINI_API_KEY = "AIzaSyAF_dpw5T3INCM-y9NNZW8z9uaEbdizwps"
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+
 
 # Streamlit Page Config
 st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", initial_sidebar_state="expanded")
