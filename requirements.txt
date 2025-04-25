@@ -13,3 +13,4 @@ streamlit-folium
 openai
 catboost
 statsmodels
+google-generativeai
