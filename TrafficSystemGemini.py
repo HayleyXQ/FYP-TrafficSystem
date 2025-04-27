@@ -62,12 +62,8 @@ st.set_page_config(page_title="🚦 Smart City Traffic System", layout="wide", i
 
 # Define Relative Paths for Deployment
 MODEL_PATHS = {
-    #"CatBoost": "C:/Users/Ning Sheng Yong/Desktop/QING APU/catmodel_traffic_model.pkl"
     "CatBoost": "catmodel_traffic_model.pkl"
 }
-#DATA_PATH = "https://drive.google.com/uc?export=download&id=1cJcWoYNuhKNWluzd4mBsScuw0lHIhs5g"
-#DATA_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/cleaned_urban_traffic_density.csv"
-#PREPROCESSOR_PATH = "C:/Users/Ning Sheng Yong/Desktop/QING APU/traffic_preprocessor.pkl"
 PREPROCESSOR_PATH = "traffic_preprocessor.pkl"
 
 
@@ -214,6 +210,21 @@ def generate_explanation(plot_choice: str, filters: dict) -> str:
     # strip any accidental HTML tags from Gemini
     explanation = gemini_generate_explanation(prompt)
     return re.sub(r"<.*?>", "", explanation).strip()
+
+
+    fallback_explanations = {
+        "Hourly Impact": "This plot depicts how traffic impact changes throughout the day, with noticeable peaks during rush hours.",
+        "Weather Impact": "This chart compares traffic impact under different weather conditions, showing how congestion changes during rain, clear skies, or snow.",
+        "Speed vs Energy": "This scatter plot illustrates the relationship between vehicle speed and energy consumption, showing that higher speeds usually result in increased energy usage.",
+        "Traffic Impact Heatmap": "This heatmap shows average traffic impact across different days and hours, making it easy to identify peak congestion periods.",
+        "Multi-City Traffic Trend": "This line chart compares hourly traffic impact trends across multiple cities, highlighting inter-city differences in congestion patterns."
+    }
+
+    if not explanation:
+        explanation = fallback_explanations.get(plot_choice, "No explanation available for this plot.")
+
+    return explanation
+
 
 
 
