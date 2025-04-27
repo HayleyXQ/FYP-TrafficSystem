@@ -674,7 +674,7 @@ elif page == "📊 Visualizations":
 # -----------------------------
 elif page == "📥 Reports":
     st.markdown("<h1 style='text-align: center;'>📥 Generate Traffic Reports</h1>", unsafe_allow_html=True)
-    
+
     col1, col2 = st.columns(2)
     with col1:
         city = st.selectbox("City", sorted(data['City'].unique()), key="city")
@@ -696,7 +696,52 @@ elif page == "📥 Reports":
     if filtered.empty:
         st.warning("No data found. Showing fallback city-level data.")
         filtered = data[data['City'] == city]
-    
+
+    # Use CatBoost directly as the default and only model
+    selected_model = all_models["CatBoost"]
+
+    # derive defaults from your full dataset:
+    subset = data[(data['City']==city)
+                &(data['Vehicle Type']==vehicle)
+                &(data['Weather_Category']==weather)
+                &(data['Economic Condition']==econ)]
+    default_speed = subset['Speed'].mean() if not subset.empty else data['Speed'].mean()
+    default_energy = subset['Energy Consumption'].mean() if not subset.empty else data['Energy Consumption'].mean()
+    is_weekend = 1 if datetime.date.today().weekday() >= 5 else 0
+    is_holiday = 1 if datetime.date.today() in manual_holidays else 0
+    tod_str = get_time_of_day(hour)
+
+    input_df = pd.DataFrame([{
+        "City": city,
+        "Vehicle Type": vehicle,
+        "Weather_Category": weather,
+        "Economic Condition": econ,
+        "Day Of Week": datetime.date.today().weekday(),
+        "Hour Of Day": hour,
+        "Speed": default_speed,
+        "Is Peak Hour": 1 if hour in list(range(7,10))+list(range(17,20)) else 0,
+        "Random Event Occurred": 0,
+        "Energy Consumption": default_energy,
+        "Is_Public_Holiday": is_holiday,
+        "Is_Weekend": is_weekend,
+        "Time of Day": tod_str,
+        "Speed_Traffic_Impact_Label": 2  # dummy placeholder
+    }])
+
+
+    if preprocessor:
+        X = preprocessor.transform(input_df)
+    else:
+        X = input_df.values
+    raw_pred = selected_model.predict(X)[0]
+    pred = int(np.clip(raw_pred.item(), 0, 4))
+    labels = ['Very Low','Low','Medium','High','Very High']
+    emojis = ['🟢','🟢','🟡','🟠','🔴']
+    pred_label = labels[pred]
+    pred_emoji = emojis[pred]
+    st.info(f"📊 **Model Prediction for these filters:** {pred_label} {pred_emoji}")
+
+
     # Show data table and CSV download
     st.dataframe(filtered.describe().reset_index())
     csv = filtered.to_csv(index=False)
@@ -747,24 +792,15 @@ elif page == "📥 Reports":
         pdf.set_font("Times", "B", 14)
         pdf.cell(0, 10, "Traffic Prediction & Suggestions", ln=True)
         pdf.set_font("Times", "", 12)
-        avg_impact = filtered['Speed_Traffic_Impact_Label'].mean()
-        if avg_impact < 1:
-            pred_label = "Very Low"
-            suggestion = "Traffic is very light. No major delays expected."
-        elif avg_impact < 2:
-            pred_label = "Low"
-            suggestion = "Traffic is light. Minimal congestion observed."
-        elif avg_impact < 3:
-            pred_label = "Medium"
-            suggestion = "Traffic is moderate. Stay alert and plan accordingly."
-        elif avg_impact < 4:
-            pred_label = "High"
-            suggestion = "Heavy traffic detected. Consider adjusting your departure time."
-        else:
-            pred_label = "Very High"
-            suggestion = "Traffic is extremely congested. Consider delaying your trip."
+        suggestion_map = {
+            'Very Low': "Traffic is very light. No major delays expected.",
+            'Low': "Traffic is light. Minimal congestion observed.",
+            'Medium': "Traffic is moderate. Plan accordingly.",
+            'High': "Heavy traffic detected. Consider departing earlier.",
+            'Very High': "Extreme congestion. Delay your trip if possible."
+        }
         pdf.cell(0, 10, f"Predicted Traffic Level: {pred_label}", ln=True)
-        pdf.multi_cell(0, 10, f"Suggestion: {suggestion}")
+        pdf.multi_cell(0, 10, f"Suggestion: {suggestion_map[pred_label]}")
         pdf.ln(5)
         
         # Visualizations Section – include all selected plots
